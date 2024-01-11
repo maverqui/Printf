@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PRINTF.H
-# define PRINTF.h
+#ifndef PRINTF
+# define PRINTF
 
-# include "libft.h"
+# include "libft/libft.h"
 # include <stdarg.h>
 # include <unistd.h>
 

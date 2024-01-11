@@ -12,57 +12,34 @@
 
 #include "printf.h"
 
-static int	ft_conversion(va_list arg, char nxt)
+static int	ft_conversion(va_list *arg, char nxt)
 {
+	int		size;
 	char	c;
-	char	*str;
-	unsigned int	nb;
-	char *nb_str;
 
-	if (nxt == '%')
-		return (write(1, '%', 1));
-	else if (nxt == 'c')
-	{
-		c = va_arg(arg, char);
-		return (write(1, &c, 1));
-	}
+	size = 0;
+	if (nxt == 'c')
+		size += ft_putchar(va_arg(*arg, int));
 	else if (nxt == 's')
-	{
-		str = va_arg(arg, char*);
-		return (write(1, str, ft_strlen(str)));
-	}
+		size += ft_putstr(va_arg(*arg, char *));
 	// else if (nxt == 'p')
 	// {
 	// 	nb = va_arg(arg, unsigned int);
 	// 	return (write(1, nb, 1));
 	// }
-	else if (nxt == 'd')
-	{
-		nb = va_arg(arg, int);
-		*nb_str = ft_itoa(nb);
-		return (write(1, nb_str, ft_strlen(nb_str)));
-	}
-	else if (nxt == 'i')
-	{
-		nb = va_arg(arg, int);
-		*nb_str = ft_itoa(nb);
-		return (write(1, nb_str, ft_strlen(nb_str)));
-	}
+	else if (nxt == 'i' || nxt == 'd')
+		size += ft_putnbr(va_arg(*arg, int));
 	else if (nxt == 'u')
+		size += ft_putnbr_unsigned(va_arg(*arg, unsigned int));
+	else if (nxt == 'x' || nxt == 'X')
+		size += ft_putnbr_hexa(va_arg(*arg, unsigned int), nxt);
+	else
 	{
-		c = va_arg(arg, char);
-		return (write(1, &c, 1));
+		size += write(1, "%", 1);
+		if (nxt != '%')
+			size += ft_putchar(nxt);
 	}
-	else if (nxt == 'x')
-	{
-		c = va_arg(arg, char);
-		return (write(1, &c, 1));
-	}
-	else if (nxt == 'X')
-	{
-		c = va_arg(arg, char);
-		return (write(1, &c, 1));
-	}
+	return (size);
 }
 
 int	ft_printf(const char *format, ...)
@@ -80,7 +57,7 @@ int	ft_printf(const char *format, ...)
        if (format[i] == '%')
        {
 			i++;
-            size += ft_conversion(arg, format[i]);
+            size += ft_conversion(&arg, format[i]);
        }
 	   else
 	   {
@@ -91,4 +68,10 @@ int	ft_printf(const char *format, ...)
     }
     va_end(arg);
 	return (size);
+}
+
+int main()
+{
+	printf("ft_print len = %d\n", ft_printf("%D\n"));
+	printf("print len = %d\n", printf("%D\n"));
 }
