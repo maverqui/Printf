@@ -10,11 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../include/ft_printf.h"
 
 static int	ft_conversion(va_list *arg, char nxt)
 {
 	int		size;
+
 
 	size = 0;
 	if (nxt == 'c')
@@ -22,7 +23,7 @@ static int	ft_conversion(va_list *arg, char nxt)
 	else if (nxt == 's')
 		size += ft_putstr(va_arg(*arg, char *));
 	else if (nxt == 'p')
-		size += ft_adresse(va_arg(*arg, unsigned long long));
+		size += ft_adresse(va_arg(*arg, void *));
 	else if (nxt == 'i' || nxt == 'd')
 		size += ft_putnbr(va_arg(*arg, int));
 	else if (nxt == 'u')
@@ -47,6 +48,8 @@ int	ft_printf(const char *format, ...)
 	i = 0;
 	size = 0;
 	va_start(arg, format);
+	if (!format)
+		return (0);
 	while (format[i] != '\0')
 	{
 		if (format[i] == '%')
@@ -64,3 +67,12 @@ int	ft_printf(const char *format, ...)
 	va_end(arg);
 	return (size);
 }
+
+// int	main()
+// {
+// 	int x = 1;
+// 	int *s = &x;
+// 	printf("\tprintf = %d\n", printf("test = %p", s));
+// 	printf("\tft_printf = %d\n", ft_printf("test = %p", s));
+// 	return (0);
+// }

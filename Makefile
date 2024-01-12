@@ -1,12 +1,14 @@
 NAME = libftprintf.a
 
-SOURCE = ft_printf.c libft/ft_putstr.c libft/ft_adresse.c \
-		 libft/ft_putnbr.c libft/ft_putnbr_hexa.c \
-		 libft/ft_putnbr_unsigned.c libft/ft_putchar.c \
+SOURCE =	srcs/ft_printf.c\
+			srcs/ft_putstr.c \
+			srcs/ft_adresse.c \
+		 	srcs/ft_putnbr.c\
+			srcs/ft_putnbr_hexa.c\
+			srcs/ft_putnbr_unsigned.c\
+			srcs/ft_putchar.c \
 
 OBJS = ${SOURCE:.c=.o}
-
-HEAD = ft_printf.h
 
 AR = ar rc
 
@@ -14,15 +16,17 @@ RM = rm -f
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I./include
 
 .PHONY: all re clean fclean
 
-${NAME}: ${OBJS} ${HEAD}
-	${CC} ${CFLAGS} -c ${SOURCE}
-	${AR} ${NAME} ${OBJS}
+%.o : %.c
+	${CC} ${CFLAGS} -c $< -o $@
 
 all: ${NAME}
+
+${NAME}: ${OBJS}
+	${AR} ${NAME} ${OBJS}
 
 clean:
 	${RM} ${OBJS} $(OBJSBONUS)
